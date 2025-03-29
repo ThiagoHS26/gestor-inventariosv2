@@ -26,7 +26,7 @@
                 @endif
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table id="warehousesTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -41,16 +41,6 @@
                             <td>{{ $warehouse->id }}</td>
                             <td>{{ $warehouse->name }}</td>
                             <td>{{ $warehouse->branch->name }}</td>
-                            <td>
-                            @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('warehouses.edit', $warehouse->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i></a>
-                                <form action="{{ route('warehouses.destroy', $warehouse->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </form>
-                            @endif
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -59,4 +49,26 @@
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#warehousesTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('warehouses.index') }}",
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'branch_name', name: 'branch_name' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
+
 @endsection

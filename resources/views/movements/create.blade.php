@@ -51,6 +51,14 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="user_id">Responsable</label>
+                        <select name="user_id" id="user_id" class="form-control" required>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="quantity">Cantidad</label>
                         <input type="number" name="quantity" id="quantity" class="form-control" required>
                     </div>

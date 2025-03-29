@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $users = User::query();
+            return DataTables::of($users)
+                ->addColumn('actions', function ($user) {
+                    return view('users.partials.actions', compact('user'))->render();
+                })
+                ->rawColumns(['actions']) 
+                ->toJson();
+        }
+    
         $users = User::all();
         return view('users.index', compact('users'));
     }
@@ -34,7 +46,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', '¡Usuario creado con éxito!');
     }
 
     public function edit(User $user)
@@ -50,14 +62,24 @@ class UserController extends Controller
             'role' => 'required',
         ]);
 
-        $user->update($request->only('name', 'email', 'role'));
+        $user->update($request->only('name', 'email', 'role'))->with('success', '¡Usuario actualizado con éxito!');
 
         return redirect()->route('users.index');
     }
 
     public function destroy(User $user)
     {
+        // Usuario actualmente autenticado
+        $currentUser = auth()->user();
+        if ($currentUser->id === $user->id) {
+            return redirect()
+                ->route('users.index')
+                ->with('warning', 'No puedes eliminar tu propia cuenta.');
+        }
         $user->delete();
-        return redirect()->route('users.index');
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', '¡Usuario eliminado con éxito!');
     }
 }

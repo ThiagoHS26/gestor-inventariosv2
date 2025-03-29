@@ -24,7 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/kardex', [KardexController::class, 'index'])->name('kardex.index'); // Vista inicial
     Route::get('/kardex/{productId}', [KardexController::class, 'kardex'])->name('kardex.show'); // Ver Kardex de un producto
     Route::get('/kardex/{productId}/export-csv', [KardexController::class, 'exportKardexCsv'])->name('kardex.export-csv'); // Exportar CSV
-
+    Route::get('/documentation', function () {
+        return view('documentation');
+    })->name('api.documentation');
 });
 
 

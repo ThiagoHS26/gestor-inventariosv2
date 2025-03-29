@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Movement;
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -10,13 +11,34 @@ use Illuminate\Http\Request;
 
 class MovementController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $movements = Movement::with('product', 'warehouse', 'user')->get();
+            return DataTables::of($movements)
+                ->addColumn('product_name', function ($movement) {
+                    return $movement->product->name;
+                })
+                ->addColumn('warehouse_name', function ($movement) {
+                    return $movement->warehouse->name;
+                })
+                ->addColumn('user_name', function ($movement) {
+                    return $movement->user->name;
+                })
+                ->addColumn('actions', function ($movement) {
+                    return view('movements.partials.actions', compact('movement'))->render();
+                })
+                ->rawColumns(['actions']) 
+                ->toJson();
+        }
+
         $movements = Movement::all();
         $products = Product::all();
         $warehouses = Warehouse::all();
         $users = User::all();
         return view('movements.index', compact('movements','products','warehouses','users'));
+
     }
 
     public function create()
@@ -40,7 +62,7 @@ class MovementController extends Controller
 
         Movement::create($request->all());
 
-        return redirect()->route('movements.index');
+        return redirect()->route('movements.index')->with('success', '¡Se registro un nuevo movimiento!');
     }
 
     public function edit(Movement $movement)
@@ -64,12 +86,12 @@ class MovementController extends Controller
 
         $movement->update($request->all());
 
-        return redirect()->route('movements.index');
+        return redirect()->route('movements.index')->with('success', '¡Se actualizó el movimiento!');
     }
 
     public function destroy(Movement $movement)
     {
         $movement->delete();
-        return redirect()->route('movements.index');
+        return redirect()->route('movements.index')->with('warning', '¡Se ha eliminado el movimiento!');
     }
 }

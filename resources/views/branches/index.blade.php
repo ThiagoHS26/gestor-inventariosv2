@@ -27,7 +27,7 @@
             @endif
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table id="branchesTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -38,28 +38,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($branches as $branch)
+                        @forelse($branches as $branch)
                         <tr>
                             <td>{{ $branch->id }}</td>
                             <td>{{ $branch->name }}</td>
                             <td>{{ $branch->address }}</td>
                             <td>{{ $branch->phone }}</td>
-                            <td>
-                            @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('branches.edit', $branch->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i></a>
-                                <form action="{{ route('branches.destroy', $branch->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </form>
-                            @endif
-                            </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">No se encontraron empresas.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#branchesTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('branches.index') }}", // URL de datos
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'address', name: 'address' },
+                { data: 'phone', name: 'phone' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
+
 @endsection

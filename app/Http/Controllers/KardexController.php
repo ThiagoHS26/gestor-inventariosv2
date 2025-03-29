@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Movement;
 
 class KardexController extends Controller
 {
-    // Pantalla inicial del Kardex
-    public function index()
+    public function index(Request $request)
     {
-        // Consulta los productos disponibles
+        if ($request->ajax()) {
+            $kardex = Product::with('movements')->get();
+            return DataTables::of($kardex)
+                ->addColumn('product_name', function ($product) {
+                    return $product->name;
+                })
+                ->addColumn('movement_type', function ($product) {
+                    return $product->movements->pluck('type')->join(', '); // Ejemplo: movimientos
+                })
+                ->addColumn('actions', function ($product) {
+                    return view('kardex.partials.actions', compact('product'))->render();
+                })
+                ->rawColumns(['actions'])
+                ->toJson();
+        }
         $products = Product::all();
-        $movement = Movement::all();
-
-        // Enviar los datos a la vista inicial
+        // Cargar la vista principal
         return view('kardex.index', compact('products'));
     }
 

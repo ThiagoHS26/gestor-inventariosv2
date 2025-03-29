@@ -24,7 +24,7 @@
                 <a href="{{ route('movements.create') }}" class="btn btn-primary">Registrar Movimiento</a>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table id="movementsTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -38,7 +38,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($movements as $movement)
+                        @forelse($movements as $movement)
                         <tr>
                             <td>{{ $movement->id }}</td>
                             <td>{{ ucfirst($movement->type) }}</td>
@@ -47,22 +47,42 @@
                             <td>{{ $movement->quantity }}</td>
                             <td>{{ $movement->date }}</td>
                             <td>{{ $movement->user->name }}</td>
-                            <td>
-                            @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('movements.edit', $movement->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i></a>
-                                <form action="{{ route('movements.destroy', $movement->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </form>
-                            @endif
-                            </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">No se encontraron Movimientos.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#movementsTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('movements.index') }}",
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'type', name: 'type' },
+                { data: 'product_name', name: 'product_name' },
+                { data: 'warehouse_name', name: 'warehouse_name' },
+                { data: 'quantity', name: 'quantity' },
+                { data: 'date', name: 'date' },
+                { data: 'user_name', name: 'user_name' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
+
 @endsection

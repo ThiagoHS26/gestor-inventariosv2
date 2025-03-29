@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->ajax()) {
+            $branches = Branch::query();
+    
+            return DataTables::of($branches)
+                ->addColumn('actions', function ($branch) {
+                    return view('branches.partials.actions', compact('branch'))->render();
+                })
+                ->rawColumns(['actions']) 
+                ->toJson();
+        }
+
         $branches = Branch::all();
         return view('branches.index', compact('branches'));
     }
@@ -28,7 +41,8 @@ class BranchController extends Controller
 
         Branch::create($request->all());
 
-        return redirect()->route('branches.index');
+        return redirect()->route('branches.index')->with('success', '¡Empresa creada con éxito!');
+
     }
 
     public function edit(Branch $branch)
@@ -46,12 +60,13 @@ class BranchController extends Controller
 
         $branch->update($request->all());
 
-        return redirect()->route('branches.index');
+        return redirect()->route('branches.index')->with('success', '¡Empresa actualizada con éxito!');
     }
 
     public function destroy(Branch $branch)
     {
         $branch->delete();
-        return redirect()->route('branches.index');
+        return redirect()->route('branches.index')->with('warning', '¡Se ha eliminado la empresa!');
     }
+
 }

@@ -83,11 +83,11 @@
                         <p>Porveedores</p>
                     </a>
                 </li>-->
-                        
+        
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('api.documentation') }}" class="nav-link">
                         <i class="nav-icon fas fa-servicestack"></i>
-                        <p>API Restful</p>
+                        <p>Servicio Restful</p>
                     </a>
                 </li>
                 <!-- Agregar más enlaces aquí -->
