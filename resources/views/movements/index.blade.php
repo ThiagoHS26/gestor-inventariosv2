@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                     <li class="breadcrumb-item active">Movimientos</li>
                 </ol>
             </div>
@@ -21,14 +21,20 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <a href="{{ route('movements.create') }}" class="btn btn-primary">Registrar Movimiento</a>
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Listado de Movimientos</h3>
+                    <a href="{{ route('movements.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                    </a>
+                </div>
             </div>
             <div class="card-body">
-                <table id="movementsTable" class="table table-bordered table-hover">
-                    <thead>
+                <table id="movementsTable" class="table table-bordered table-hover table-striped w-100">
+                    <thead class="bg-lightblue">
                         <tr>
-                            <th>#</th>
+                            <th>ID</th>
                             <th>Tipo</th>
+                            <th>Detalles</th>
                             <th>Producto</th>
                             <th>Almacén</th>
                             <th>Cantidad</th>
@@ -38,21 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($movements as $movement)
-                        <tr>
-                            <td>{{ $movement->id }}</td>
-                            <td>{{ ucfirst($movement->type) }}</td>
-                            <td>{{ $movement->product->name }}</td>
-                            <td>{{ $movement->warehouse->name }}</td>
-                            <td>{{ $movement->quantity }}</td>
-                            <td>{{ $movement->date }}</td>
-                            <td>{{ $movement->user->name }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="text-center">No se encontraron Movimientos.</td>
-                        </tr>
-                        @endforelse
+                        <!-- Los datos se cargarán automáticamente via AJAX -->
                     </tbody>
                 </table>
             </div>
@@ -74,6 +66,7 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'type', name: 'type' },
+                { data: 'description', name: 'description' },
                 { data: 'product_name', name: 'product_name' },
                 { data: 'warehouse_name', name: 'warehouse_name' },
                 { data: 'quantity', name: 'quantity' },
@@ -84,5 +77,4 @@
         });
     });
 </script>
-
 @endsection

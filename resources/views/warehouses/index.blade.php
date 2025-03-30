@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Almacenes</h1>
+                <h1 class="m-0">Bodegas</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
-                    <li class="breadcrumb-item active">Almacenes</li>
+                    <li class="breadcrumb-item active">Bodegas</li>
                 </ol>
             </div>
         </div>
@@ -21,29 +21,25 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+                <div class="d-flex justify-content-between">
+                <h3 class="card-title">Listado de Bodegas</h3>
                 @if(Auth::user()->role === 'admin')
-                <a href="{{ route('warehouses.create') }}" class="btn btn-primary">Crear Nuevo Almacén</a>
+                    <a href="{{ route('warehouses.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                    </a>
                 @endif
+                </div>
             </div>
             <div class="card-body">
-                <table id="warehousesTable" class="table table-bordered table-hover">
-                    <thead>
+                <table id="warehousesTable" class="table table-bordered table-hover table-striped w-100">
+                    <thead class="bg-lightblue">
                         <tr>
                             <th>#</th>
-                            <th>Almacenes</th>
-                            <th>Principal</th>
+                            <th>Bodegas</th>
+                            <th>Almacén principal</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($warehouses as $warehouse)
-                        <tr>
-                            <td>{{ $warehouse->id }}</td>
-                            <td>{{ $warehouse->name }}</td>
-                            <td>{{ $warehouse->branch->name }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
                 </table>
             </div>
         </div>

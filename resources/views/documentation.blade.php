@@ -8,54 +8,52 @@
         <div class="card">
             <div class="card-header">
                 <h2>Documentación de la API RESTful</h2>
-                <p>Para acceder a la API, se debe enviar un token en cada solicitud protegida.</p>
-                <pre>Authorization: Bearer {token}</pre>
+                <p>Este servicio RESTful esta habilitado sin necesidad de cabeceras o autorización Bearer</p>
             </div>
             <div class="card-body">
-                <h2>Autenticación</h2>
                 <h3>Endpoints</h3>
-                <h4>1. Registro de Usuario</h4>
-                <p><strong>POST /api/register</strong></p>
+                <h4>1. Inventario Final Actualizado</h4>
+                <p><strong>GET /api/products</strong></p>
                 <pre>
                 {
-                    "name": "Usuario Ejemplo",
-                    "email": "usuario@example.com",
-                    "password": "password123",
-                    "password_confirmation": "password123"
+                    "id": 1,
+                    "name": "nombre",
+                    "description": "descripcion",
+                    "category_id": 1,
+                    "warehouse_id": 1,
+                    "quantity": 1,
+                    "min_stock": 1,
+                    "max_stock": 1,
+                    "price": "0.00",
+                    "created_at": "2025-03-28T15:26:47.000000Z",
+                    "updated_at": "2025-03-29T02:59:43.000000Z",
+                    "deleted_at": null
+                }
+                </pre>
+                
+                <h4>2. Registro de Movimientos Actualizado</h4>
+                <p><strong>GET /api/movements</strong></p>
+                <pre>
+                {
+                    "id": 1,
+                    "type": "tipo",
+                    "product_id": 1,
+                    "user_id": 1,
+                    "warehouse_id": 1,
+                    "quantity": 1,
+                    "date": "2025-03-01",
+                    "created_at": null,
+                    "updated_at": null,
+                    "deleted_at": null
                 }
                 </pre>
 
-                <h3>Inicio de Sesión</h3>
-                <p><strong>POST /api/login</strong></p>
-                <pre>
-                {
-                    "email": "usuario@example.com",
-                    "password": "password123"
-                }
-                </pre>
-
-                <h3>Obtener Perfil</h3>
-                <p><strong>GET /api/user</strong></p>
-                <pre>Authorization: Bearer {token}</pre>
-
-                <h3>Cerrar Sesión</h3>
-                <p><strong>POST /api/logout</strong></p>
-                <pre>Authorization: Bearer {token}</pre>
                 <div class="card-footer">
-                    <p>Proximas actualizaciones</p>
+                    <p>Proximas actualizaciones en camino</p>
                 </div>
 
             </div>
         </div>
     </div>
-</div>
-
-<div class="container">
-    <h1></h1>
-    
-    
-
-    
-    
 </div>
 @endsection

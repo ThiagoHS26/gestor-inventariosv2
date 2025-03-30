@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Warehouse;
@@ -9,8 +10,25 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
+        if($request->ajax()){
+            $products = Product::with('category','warehouse')->select('products.*');
+            
+            return DataTables::eloquent($products)
+                ->addColumn('category_name',function ($product){
+                    return $product->category ? $product->category->name : 'N/A';
+                })
+                ->addColumn('warehouse_name',function($product){
+                    return $product->warehouse ? $product->warehouse->name: 'N/A';
+                })
+                ->addColumn('actions', function ($product) {
+                    return view('products.partials.actions', compact('product'))->render();
+                })
+                ->rawColumns(['actions']) 
+                ->toJson();
+        }
     
         $products = Product::all();
         $categories = Category::all();

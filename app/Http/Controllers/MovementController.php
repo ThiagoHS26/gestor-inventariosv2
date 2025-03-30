@@ -12,33 +12,33 @@ use Illuminate\Http\Request;
 class MovementController extends Controller
 {
 
-    public function index(Request $request)
+        public function index(Request $request)
     {
         if ($request->ajax()) {
-            $movements = Movement::with('product', 'warehouse', 'user')->get();
-            return DataTables::of($movements)
-                ->addColumn('product_name', function ($movement) {
-                    return $movement->product->name;
-                })
-                ->addColumn('warehouse_name', function ($movement) {
-                    return $movement->warehouse->name;
-                })
-                ->addColumn('user_name', function ($movement) {
-                    return $movement->user->name;
-                })
-                ->addColumn('actions', function ($movement) {
-                    return view('movements.partials.actions', compact('movement'))->render();
-                })
-                ->rawColumns(['actions']) 
-                ->toJson();
+            $movements = Movement::with('product', 'warehouse', 'user')->select('movements.*');
+            
+            return DataTables::eloquent($movements)
+            ->addColumn('product_name', function($movement) {
+                return $movement->product ? $movement->product->name : 'N/A';
+            })
+            ->addColumn('warehouse_name', function($movement) {
+                return $movement->warehouse ? $movement->warehouse->name : 'N/A';
+            })
+            ->addColumn('user_name', function($movement) {
+                return $movement->user ? $movement->user->name : 'N/A';
+            })
+            ->addColumn('actions', function($movement) {
+                return view('movements.partials.actions', compact('movement'));
+            })
+            ->rawColumns(['actions'])
+            ->toJson();
         }
 
-        $movements = Movement::all();
         $products = Product::all();
         $warehouses = Warehouse::all();
         $users = User::all();
-        return view('movements.index', compact('movements','products','warehouses','users'));
-
+        $movements = Movement::all();
+        return view('movements.index', compact('movements','products', 'warehouses', 'users'));
     }
 
     public function create()
@@ -53,6 +53,7 @@ class MovementController extends Controller
     {
         $request->validate([
             'type' => 'required|in:ingreso,egreso',
+            'description' => 'required',
             'product_id' => 'required|exists:products,id',
             'warehouse_id' => 'required|exists:warehouses,id',
             'user_id' => 'required|exists:users,id',
@@ -78,6 +79,7 @@ class MovementController extends Controller
         $request->validate([
             'type' => 'required|in:ingreso,egreso',
             'product_id' => 'required|exists:products,id',
+            'description' => 'required',
             'warehouse_id' => 'required|exists:warehouses,id',
             'user_id' => 'required|exists:users,id',
             'quantity' => 'required|integer',

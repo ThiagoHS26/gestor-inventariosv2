@@ -2,8 +2,6 @@
 
 @section('content')
 
-
-
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -12,7 +10,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                     <li class="breadcrumb-item active">Usuarios</li>
                 </ol>
             </div>
@@ -24,13 +22,18 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                @if(Auth::user()->role === 'admin')
-                <a href="{{ route('users.create') }}" class="btn btn-primary">Crear Nuevo Usuario</a>
-                @endif
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Listado de Usuarios</h3>
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('users.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        </a>
+                        @endif
+                </div>
             </div>
             <div class="card-body">
-            <table id="usersTable" class="table">
-                <thead>
+            <table id="usersTable" class="table table-bordered table-hover table-striped w-100">
+                <thead class="bg-lightblue">
                     <tr>
                         <th>Nombre</th>
                         <th>Email</th>

@@ -18,7 +18,7 @@ class KardexController extends Controller
                     return $product->name;
                 })
                 ->addColumn('movement_type', function ($product) {
-                    return $product->movements->pluck('type')->join(', '); // Ejemplo: movimientos
+                    return $product->movements->pluck('type')->join(', ');
                 })
                 ->addColumn('actions', function ($product) {
                     return view('kardex.partials.actions', compact('product'))->render();
@@ -27,26 +27,27 @@ class KardexController extends Controller
                 ->toJson();
         }
         $products = Product::all();
-        // Cargar la vista principal
         return view('kardex.index', compact('products'));
     }
 
     // Visualización del Kardex por producto
     public function kardex($productId)
     {
+
         $kardex = Movement::where('product_id', $productId)
             ->orderBy('date', 'asc') // Ordenado por fecha
             ->get()
             ->map(function ($movement) {
                 static $saldo = 0; // Variable de saldo acumulado
                 if ($movement->type === 'ingreso') {
-                    $saldo += $movement->quantity; // Suma el saldo en caso de ingreso
+                    $saldo += $movement->quantity; // Suma el saldo en caso de ingreso 
                 } elseif ($movement->type === 'egreso') {
                     $saldo -= $movement->quantity; // Resta el saldo en caso de egreso
                 }
 
                 return [
                     'fecha' => $movement->date,
+                    'descripcion' => $movement->description,
                     'tipo' => ucfirst($movement->type),
                     'cantidad' => $movement->quantity,
                     'saldo' => $saldo,

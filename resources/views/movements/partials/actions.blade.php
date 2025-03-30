@@ -1,8 +1,14 @@
-@if(Auth::user()->role === 'admin')
-<a href="{{ route('movements.edit', $movement->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-pencil"></i></a>
-    <form action="{{ route('movements.destroy', $movement->id) }}" method="POST" style="display:inline;">
+<div class="d-flex justify-content-center">
+    @if(Auth::user()->role === 'admin')
+    <a href="{{ route('movements.edit', $movement->id) }}" class="btn btn-warning btn-sm mx-1" title="Editar">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+    <form action="{{ route('movements.destroy', $movement->id) }}" method="POST" class="d-inline">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+        <button type="submit" class="btn btn-danger btn-sm mx-1" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este movimiento?')">
+            <i class="fas fa-trash-alt"></i>
+        </button>
     </form>
-@endif
+    @endif
+</div>

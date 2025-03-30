@@ -34,6 +34,7 @@ class HomeController extends Controller
         ));
     }
 
+    /*Top Ventas no Disponible para Inventarios */
     private function getTopProducts()
     {
         return Movement::where('type', 'egreso')
@@ -75,9 +76,9 @@ class HomeController extends Controller
         $inventoryByWarehouse = Warehouse::with('products')->get();
 
         return [
-            'warehouseNames' => $inventoryByWarehouse->pluck('name'), // Nombres de almacenes
+            'warehouseNames' => $inventoryByWarehouse->pluck('name'),
             'warehouseProducts' => $inventoryByWarehouse->map(function ($warehouse) {
-                return $warehouse->products->sum('quantity'); // Stock total por almacén
+                return $warehouse->products->sum('quantity');
             }),
         ];
     }
@@ -85,7 +86,7 @@ class HomeController extends Controller
 
     private function getLowStockProducts()
     {
-        return Product::where('quantity', '<', 10)->get();
+        return Product::where('quantity', '<', 5)->get();
     }
 
     /* KARDEX */

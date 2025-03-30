@@ -1,3 +1,4 @@
+@if(Auth::user()->role === 'admin')
 <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">
     <i class="fas fa-pencil-alt"></i>
 </a>
@@ -8,3 +9,4 @@
         <i class="fas fa-trash-alt"></i>
     </button>
 </form>
+@endif

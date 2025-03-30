@@ -21,13 +21,18 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                @if(Auth::user()->role === 'admin')
-                <a href="{{ route('categories.create') }}" class="btn btn-primary">Crear Nueva Categoría</a>
-                @endif
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Listado de Categorías</h3>
+                    @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('categories.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                    </a>
+                    @endif
+                </div>
             </div>
             <div class="card-body">
-            <table id="categoriesTable" class="table table-bordered table-hover">
-                <thead>
+            <table id="categoriesTable" class="table table-bordered table-hover table-striped w-100">
+                <thead class="bg-lightblue">
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>

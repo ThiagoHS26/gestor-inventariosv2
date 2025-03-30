@@ -20,15 +20,21 @@
 <div class="content">
     <div class="container-fluid">
         <div class="card">
-            
             <div class="card-header">
-            @if(Auth::user()->role === 'admin')
-                <a href="{{ route('branches.create') }}" class="btn btn-primary">Crear Empresa</a>
-            @endif
+                <div class="d-flex justify-content-between">
+                    <h3 class="card-title">Listado de Empresas</h3>
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('branches.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        </a>
+                    @endif
+                </div>
+            
             </div>
+
             <div class="card-body">
-                <table id="branchesTable" class="table table-bordered table-hover">
-                    <thead>
+                <table id="branchesTable" class="table table-bordered table-hover table-striped w-100">
+                    <thead class="bg-lightblue">
                         <tr>
                             <th>#</th>
                             <th>Nombre</th>
@@ -37,20 +43,7 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse($branches as $branch)
-                        <tr>
-                            <td>{{ $branch->id }}</td>
-                            <td>{{ $branch->name }}</td>
-                            <td>{{ $branch->address }}</td>
-                            <td>{{ $branch->phone }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="text-center">No se encontraron empresas.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
+                    <!--Columnas generadas por AJAX-->
                 </table>
             </div>
         </div>

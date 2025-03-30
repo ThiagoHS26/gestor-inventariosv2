@@ -82,4 +82,11 @@ class UserController extends Controller
             ->route('users.index')
             ->with('success', '¡Usuario eliminado con éxito!');
     }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('users.show', compact('user'));
+    }
+
 }

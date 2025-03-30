@@ -13,15 +13,16 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $warehouses = Warehouse::with('branch');
-            return DataTables::of($warehouses)
+            $warehouses = Warehouse::with('branch')->select('warehouses.*');
+            
+            return DataTables::eloquent($warehouses)
                 ->addColumn('branch_name', function ($warehouse) {
-                    return $warehouse->branch->name; // Nombre de la sucursal
+                    return $warehouse->branch ? $warehouse->branch->name : 'N/A';
                 })
                 ->addColumn('actions', function ($warehouse) {
                     return view('warehouses.partials.actions', compact('warehouse'))->render();
                 })
-                ->rawColumns(['actions']) // Permitir HTML en las acciones
+                ->rawColumns(['actions'])
                 ->toJson();
         }
         $branches = Branch::all();
@@ -49,7 +50,8 @@ class WarehouseController extends Controller
 
     public function edit(Warehouse $warehouse)
     {
-        return view('warehouses.edit', compact('warehouse'));
+        $branches = Branch::all();
+        return view('warehouses.edit', compact('warehouse','branches'));
     }
 
     public function update(Request $request, Warehouse $warehouse)

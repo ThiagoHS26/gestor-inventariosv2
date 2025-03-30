@@ -4,14 +4,17 @@
 <div class="container">
     <h1>Dashboard</h1>
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <h4>Inventario por Almacén</h4>
-        </div>
-        <div class="card-body">
-            <div class="chart-container" style="height: 300px; width: 100%;">
-                <canvas id="inventoryByWarehouseChart"></canvas>
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                    <h4>Movimientos Mensuales</h4>
             </div>
+            <div class="card-body">
+                <div class="chart-container" style="height: 300px; width: 100%;">
+                    <canvas id="inventoryByWarehouseChart"></canvas>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -20,7 +23,7 @@
        <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <h4>Top 5 Productos Más Vendidos</h4>
+                    <h4>Productos con más egresos</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -57,7 +60,7 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
     <!-- Productos en bajo stock -->
     <div class="card">
@@ -79,7 +82,7 @@
                         @foreach($lowStockProducts as $product)
                             <tr>
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->quantity }}</td>
+                                <td style="background: #760000;color:white; font-weight: 600; text-align:center;">{{ $product->quantity }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -96,8 +99,8 @@
     const warehouseNames = @json($inventoryData['warehouseNames']);
     const warehouseProducts = @json($inventoryData['warehouseProducts']);
 
-    const topProductsNames = @json($topProducts->pluck('name'));
-    const topProductsSales = @json($topProducts->pluck('sales_sum_quantity'));
+    const topProductsNames = @json($topProducts->pluck('product_id'));
+    const topProductsSales = @json($topProducts->pluck('total_sold'));
 
     const categoryNames = @json($stockLevels->pluck('name'));
     const categoryStocks = @json($stockLevels->pluck('total_stock'));
@@ -114,8 +117,8 @@
             datasets: [{
                 label: 'Total de Productos',
                 data: warehouseProducts, // Cantidades por almacén
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: '#343ee7',
+                borderColor: '#00b889',
                 borderWidth: 1
             }]
         },
@@ -131,23 +134,17 @@
 
     // Gráfico: Top 5 Productos Más Vendidos
     new Chart(document.getElementById('topProductsChart').getContext('2d'), {
-        type: 'bar',
+        type: 'pie',
         data: {
             labels: topProductsNames,
             datasets: [{
-                label: 'Cantidad Vendida',
                 data: topProductsSales,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                backgroundColor: ['#32cf00', '#cf3800', '#00b889', '#4BC0C0', '#db0088'],
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true }
-            }
         }
     });
 
@@ -158,7 +155,9 @@
             labels: categoryNames,
             datasets: [{
                 data: categoryStocks,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                backgroundColor: ['#32cf00', '#cf3800', '#00b889', '#ff00e8 ',
+                '#4BC0C0', '#db0088', '#2ed9d4', '#7200f3',
+                '#ffc100', '#4dbd00'],
             }]
         },
         options: { responsive: true, maintainAspectRatio: false }
@@ -168,7 +167,7 @@
     new Chart(document.getElementById('monthlyMovementsChart').getContext('2d'), {
         type: 'line',
         data: {
-            labels: months,
+            labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
             datasets: [{
                 label: 'Ingresos',
                 data: monthlyIncomes,

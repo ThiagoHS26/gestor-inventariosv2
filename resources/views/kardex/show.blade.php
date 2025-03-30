@@ -2,12 +2,13 @@
 
 @section('content')
 <div class="container">
-    <h1>Kardex del Producto</h1>
+    <h2>Kardex del Producto</h2>
 
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Fecha</th>
+                <th>Detalles</th>
                 <th>Tipo</th>
                 <th>Cantidad</th>
                 <th>Saldo</th>
@@ -17,6 +18,7 @@
             @foreach($kardex as $registro)
                 <tr>
                     <td>{{ $registro['fecha'] }}</td>
+                    <td>{{ $registro['descripcion'] }}</td>
                     <td>{{ $registro['tipo'] }}</td>
                     <td>{{ $registro['cantidad'] }}</td>
                     <td>{{ $registro['saldo'] }}</td>

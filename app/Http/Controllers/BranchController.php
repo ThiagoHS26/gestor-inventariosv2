@@ -47,6 +47,7 @@ class BranchController extends Controller
 
     public function edit(Branch $branch)
     {
+       
         return view('branches.edit', compact('branch'));
     }
 

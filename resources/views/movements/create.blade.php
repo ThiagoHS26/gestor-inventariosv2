@@ -35,10 +35,14 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="type">Detalle del movimiento</label>
+                        <textarea name="description" id="description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
                         <label for="product_id">Producto</label>
                         <select name="product_id" id="product_id" class="form-control" required>
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                <option value="{{ $product->id }}">{{ $product->name }} | Qty: {{$product->quantity}}</option>
                             @endforeach
                         </select>
                     </div>
