@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Warehouse;
 use App\Models\Branch;
+use App\Models\Product;
+use App\Models\Movement;
 use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
@@ -71,4 +73,119 @@ class WarehouseController extends Controller
         $warehouse->delete();
         return redirect()->route('warehouses.index')->with('warning', '¡Se ha eliminado una bodega!');
     }
+    
+    //Funcion para visualizar inventario
+    public function show($id)
+    {
+        $warehouse = Warehouse::with(['branch', 'products.category', 'movements.product'])
+            ->findOrFail($id);
+
+        $inventory = Product::where('products.warehouse_id', $id)
+            ->selectRaw('
+                products.id,
+                products.name,
+                products.description,
+                products.warehouse_id,
+                products.category_id,
+                products.quantity,
+                products.min_stock,
+                products.max_stock,
+                products.price,
+                categories.name as category_name,
+                COALESCE(SUM(CASE WHEN movements.type = "ingreso" THEN movements.quantity ELSE 0 END), 0) - 
+                COALESCE(SUM(CASE WHEN movements.type = "egreso" THEN movements.quantity ELSE 0 END), 0) as stock
+            ')
+            ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->leftJoin('movements', function($join) {
+                $join->on('movements.product_id', '=', 'products.id')
+                    ->whereNull('movements.deleted_at');
+            })
+            ->whereNull('products.deleted_at')
+            ->groupBy([
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.warehouse_id',
+                'products.category_id',
+                'products.quantity',
+                'products.min_stock',
+                'products.max_stock',
+                'products.price',
+                'categories.name'
+            ])
+            ->orderBy('products.name')
+            ->get();
+
+        return view('warehouses.show', [
+            'warehouse' => $warehouse,
+            'inventory' => $inventory
+        ]);
+    }
+
+    public function exportCsv($id)
+    {
+        $warehouse = Warehouse::findOrFail($id);
+
+        $inventory = Product::where('products.warehouse_id', $id)
+            ->selectRaw('
+                products.id,
+                products.name,
+                products.description,
+                products.quantity,
+                products.warehouse_id,
+                products.category_id,
+                products.min_stock,
+                products.max_stock,
+                products.price,
+                categories.name as category_name,
+                COALESCE(SUM(CASE WHEN movements.type = "ingreso" THEN movements.quantity ELSE 0 END), 0) - 
+                COALESCE(SUM(CASE WHEN movements.type = "egreso" THEN movements.quantity ELSE 0 END), 0) as stock
+            ')
+            ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->leftJoin('movements', function($join) {
+                $join->on('movements.product_id', '=', 'products.id')
+                    ->whereNull('movements.deleted_at');
+            })
+            ->whereNull('products.deleted_at')
+            ->groupBy([
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.quantity',
+                'products.warehouse_id',
+                'products.category_id',
+                'products.min_stock',
+                'products.max_stock',
+                'products.price',
+                'categories.name'
+            ])
+            ->orderBy('products.name')
+            ->get();
+
+        $fileName = 'inventario_almacen_' . $warehouse->id . '.pdf';
+
+        header("Content-Type: text/pdf");
+        header("Content-Disposition: attachment;filename={$fileName}");
+
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, ['ID', 'Nombre', 'Descripción', 'Categoría', 'Stock', 'Precio']);
+
+        foreach ($inventory as $product) {
+            fputcsv($output, [
+                $product->id,
+                $product->name,
+                $product->description,
+                $product->category_name,
+                $product->quantity,
+                number_format($product->price, 2, '.', '')
+            ]);
+        }
+
+        fclose($output);
+        exit;
+    }
+
+
+
 }

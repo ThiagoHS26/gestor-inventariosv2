@@ -55,5 +55,20 @@
             });
         @endif
     </script>
+    
+    @if(session('welcome'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                title: '¡Bienvenido!',
+                text: 'Hola, {{ Auth::user()->name }}',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false,
+                background: '#fff'
+            });
+        });
+    </script>
+    @endif
 </body>
 </html>

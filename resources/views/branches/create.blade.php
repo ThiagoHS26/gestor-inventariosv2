@@ -37,7 +37,22 @@
                     </div>
                     <div class="form-group">
                         <label for="phone">Teléfono</label>
-                        <input type="text" name="phone" id="phone" class="form-control">
+                        <!--<input type="tel" name="phone" id="phone" class="form-control">-->
+                        <input 
+                            type="tel" 
+                            id="phone"
+                            name="phone"
+                            class="form-control @error('phone') is-invalid @enderror"
+                            placeholder="Ej: 0987654321"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                            value="{{ old('phone') }}"
+                            required
+                        >
+                        @error('phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <button type="submit" class="btn btn-success">Guardar Sucursal</button>
                 </form>

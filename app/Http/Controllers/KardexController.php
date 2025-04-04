@@ -64,7 +64,7 @@ class KardexController extends Controller
             ->orderBy('date', 'asc')
             ->get()
             ->map(function ($movement) {
-                static $saldo = 0; // Saldo acumulado
+                static $saldo = 0; 
                 if ($movement->type === 'ingreso') {
                     $saldo += $movement->quantity;
                 } elseif ($movement->type === 'egreso') {

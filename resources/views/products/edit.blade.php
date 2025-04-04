@@ -52,13 +52,10 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" value="{{ $product->quantity }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Cantidad</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" value="{{ $product->quantity }}" required>
+                        <input type="number" name="quantity" id="quantity" class="form-control" value="{{ $product->quantity }}" required disabled>
                     </div>
                     <div class="form-group">
                         <label for="min_stock">Stock mínimo</label>
