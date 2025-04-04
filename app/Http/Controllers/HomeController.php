@@ -34,7 +34,7 @@ class HomeController extends Controller
         ));
     }
 
-    /*Top Ventas no Disponible para Inventarios */
+    /*Top productos con mas salidas*/
     private function getTopProducts()
     {
         return Movement::where('type', 'egreso')
@@ -43,7 +43,15 @@ class HomeController extends Controller
             ->orderByDesc('total_sold')
             ->take(5)
             ->with('product')
-            ->get();
+            ->get()
+            ->map(function ($movement) {
+                $name = $movement->product->name;
+                $abbreviation = substr($name, 0, 15);
+                return [
+                    'name' => $abbreviation,
+                    'total_sold' => $movement->total_sold,
+                ];
+            });
     }
 
     /* Niveles de Stock por categoria */
@@ -61,13 +69,33 @@ class HomeController extends Controller
 
     private function getMonthlyMovements()
     {
-        return Movement::select(
-                DB::raw('MONTH(date) as month'),
-                'type',
-                DB::raw('SUM(quantity) as total')
-            )
-            ->groupBy('month', 'type')
-            ->get();
+        $movements = Movement::select(
+            DB::raw('MONTH(date) as month'),
+            'type', 
+            DB::raw('SUM(quantity) as total') 
+        )
+        ->groupBy('month', 'type') 
+        ->orderBy('month')
+        ->get();
+
+        $monthlyData = [
+            'incomes' => array_fill(1, 12, 0), 
+            'outcomes' => array_fill(1, 12, 0),
+        ];
+
+        $movements->each(function ($movement) use (&$monthlyData) {
+            if ($movement->type === 'ingreso') {
+                $monthlyData['incomes'][$movement->month] = $movement->total;
+            } elseif ($movement->type === 'egreso') {
+                $monthlyData['outcomes'][$movement->month] = $movement->total;
+            }
+        });
+
+        return [
+            'incomes' => array_values($monthlyData['incomes']), 
+            'outcomes' => array_values($monthlyData['outcomes']), 
+        ];
+
     }
 
     /*Distribucion de inventario por almacen */
@@ -89,29 +117,6 @@ class HomeController extends Controller
         return Product::where('quantity', '<', 5)->get();
     }
 
-    /* KARDEX */
-    public function kardex($productId)
-    {
-        $kardex = Movement::where('product_id', $productId)
-            ->orderBy('date', 'asc') // Ordenado por fecha
-            ->get()
-            ->map(function ($movement) {
-                static $saldo = 0; // Variable de saldo acumulado
-                if ($movement->type === 'ingreso') {
-                    $saldo += $movement->quantity;
-                } elseif ($movement->type === 'egreso') {
-                    $saldo -= $movement->quantity;
-                }
-
-                return [
-                    'fecha' => $movement->date,
-                    'tipo' => ucfirst($movement->type),
-                    'cantidad' => $movement->quantity,
-                    'saldo' => $saldo,
-                ];
-            });
-
-        return view('kardex.index', compact('kardex'));
-    }
+    
 
 }

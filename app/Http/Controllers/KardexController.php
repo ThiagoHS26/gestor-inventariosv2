@@ -33,29 +33,33 @@ class KardexController extends Controller
     // Visualización del Kardex por producto
     public function kardex($productId)
     {
+        $product = Product::find($productId);
 
-        $kardex = Movement::where('product_id', $productId)
-            ->orderBy('date', 'asc') // Ordenado por fecha
-            ->get()
-            ->map(function ($movement) {
-                static $saldo = 0; // Variable de saldo acumulado
-                if ($movement->type === 'ingreso') {
-                    $saldo += $movement->quantity; // Suma el saldo en caso de ingreso 
-                } elseif ($movement->type === 'egreso') {
-                    $saldo -= $movement->quantity; // Resta el saldo en caso de egreso
-                }
+        if (!$product) {
+            abort(404, 'Producto no encontrado');
+        }
 
-                return [
-                    'fecha' => $movement->date,
-                    'descripcion' => $movement->description,
-                    'tipo' => ucfirst($movement->type),
-                    'cantidad' => $movement->quantity,
-                    'saldo' => $saldo,
-                ];
-            });
+        $movements = Movement::select('date', 'description', 'type', 'quantity')
+            ->where('product_id', $productId)
+            ->orderBy('date', 'asc')
+            ->get();
 
-        return view('kardex.show', compact('kardex'));
+        $saldo = 0;
+        $kardex = $movements->map(function ($movement) use (&$saldo) {
+            $saldo += ($movement->type === 'ingreso') ? $movement->quantity : -$movement->quantity;
+            return [
+                'fecha' => $movement->date,
+                'descripcion' => $movement->description,
+                'tipo' => ucfirst($movement->type),
+                'cantidad' => $movement->quantity,
+                'saldo' => $saldo,
+            ];
+        });
+
+        return view('kardex.show', compact('kardex', 'product'));
     }
+
+
 
     // Exportar en formato CSV
     public function exportKardexCsv($productId)

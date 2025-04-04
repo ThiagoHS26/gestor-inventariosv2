@@ -83,13 +83,14 @@
                         <p>Porveedores</p>
                     </a>
                 </li>-->
-        
+                @if(Auth::user()->role === 'admin')
                 <li class="nav-item">
                     <a href="{{route('api.documentation') }}" class="nav-link">
                         <i class="nav-icon fas fa-servicestack"></i>
                         <p>Servicio Restful</p>
                     </a>
                 </li>
+                @endif
                 <!-- Agregar más enlaces aquí -->
             </ul>
         </nav>

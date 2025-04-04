@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <label for="product_id">Producto</label>
-                        <select name="product_id" id="product_id" class="form-control" required>
+                        <select name="product_id" id="product_id" class="form-control" disabled>
                             @foreach($products as $product)
                                 <option value="{{ $product->id }}" {{ $product->id == $movement->product_id ? 'selected' : '' }}>{{ $product->name }}</option>
                             @endforeach
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label for="warehouse_id">Almacén</label>
-                        <select name="warehouse_id" id="warehouse_id" class="form-control" required>
+                        <select name="warehouse_id" id="warehouse_id" class="form-control" disabled>
                             @foreach($warehouses as $warehouse)
                                 <option value="{{ $warehouse->id }}" {{ $warehouse->id == $movement->warehouse_id ? 'selected' : '' }}>{{ $warehouse->name }}</option>
                             @endforeach

@@ -162,9 +162,9 @@ class WarehouseController extends Controller
             ->orderBy('products.name')
             ->get();
 
-        $fileName = 'inventario_almacen_' . $warehouse->id . '.pdf';
+        $fileName = 'inventario_almacen_' . $warehouse->id . '.csv';
 
-        header("Content-Type: text/pdf");
+        header("Content-Type: text/csv");
         header("Content-Disposition: attachment;filename={$fileName}");
 
         $output = fopen('php://output', 'w');

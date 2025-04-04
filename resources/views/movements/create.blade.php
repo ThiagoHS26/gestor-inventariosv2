@@ -38,23 +38,30 @@
                         <label for="type">Detalle del movimiento</label>
                         <textarea name="description" id="description" class="form-control" required></textarea>
                     </div>
+
                     <div class="form-group">
-                        <label for="product_id">Producto</label>
-                        <select name="product_id" id="product_id" class="form-control" required>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }} | Qty: {{$product->quantity}}</option>
-                            @endforeach
-                        </select>
+                        <label for="warehouse_id">Producto</label>
+                    <select name="product_id" id="product_id" class="form-control" required>
+                        @foreach($products as $product)
+                            <option value="{{ $product->id }}" data-warehouse-id="{{ $product->warehouse_id }}">
+                                {{ $product->name }} | Qty: {{ $product->quantity }}
+                            </option>
+                        @endforeach
+                    </select>
                     </div>
+
+                    
                     <div class="form-group">
                         <label for="warehouse_id">Almacén</label>
-                        <select name="warehouse_id" id="warehouse_id" class="form-control" required>
+                        <select name="warehouse_id" id="warehouse_id" class="form-control" disabled>
                             @foreach($warehouses as $warehouse)
                                 <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    
+
+                    <input type="hidden" name="warehouse_id" id="warehouse_id_hidden">
+
                     <div class="form-group">
     
                         <input type="text" name="user_id" id="user_id" class="form-control"
@@ -77,4 +84,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    const productSelect = document.getElementById('product_id');
+    const warehouseSelect = document.getElementById('warehouse_id');
+    const warehouseHidden = document.getElementById('warehouse_id_hidden');
+
+    function updateWarehouse() {
+        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        const warehouseId = selectedOption.getAttribute('data-warehouse-id');
+        if (warehouseId) {
+            warehouseSelect.value = warehouseId;
+            warehouseHidden.value = warehouseId;
+        }
+    }
+
+    productSelect.addEventListener('change', updateWarehouse);
+
+    // Set initial value on page load
+    window.addEventListener('DOMContentLoaded', updateWarehouse);
+</script>
+
 @endsection

@@ -99,15 +99,17 @@
     const warehouseNames = @json($inventoryData['warehouseNames']);
     const warehouseProducts = @json($inventoryData['warehouseProducts']);
 
-    const topProductsNames = @json($topProducts->pluck('product_id'));
+    const topProductsNames = @json($topProducts->pluck('name'));
     const topProductsSales = @json($topProducts->pluck('total_sold'));
 
     const categoryNames = @json($stockLevels->pluck('name'));
     const categoryStocks = @json($stockLevels->pluck('total_stock'));
+   
+    const monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const monthlyIncomes = @json($monthlyMovements['incomes']);
+    const monthlyOutcomes = @json($monthlyMovements['outcomes']);
 
-    const months = @json($monthlyMovements->pluck('month')->unique());
-    const monthlyIncomes = @json($monthlyMovements->where('type', 'ingreso')->pluck('total'));
-    const monthlyOutcomes = @json($monthlyMovements->where('type', 'egreso')->pluck('total'));
+
 
     /* Inventario por almacen */
     new Chart(document.getElementById('inventoryByWarehouseChart').getContext('2d'), {
@@ -148,6 +150,7 @@
         }
     });
 
+
     // Gráfico: Niveles de Stock por Categoría
     new Chart(document.getElementById('stockByCategoryChart').getContext('2d'), {
         type: 'pie',
@@ -167,20 +170,28 @@
     new Chart(document.getElementById('monthlyMovementsChart').getContext('2d'), {
         type: 'line',
         data: {
-            labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-            datasets: [{
-                label: 'Ingresos',
-                data: monthlyIncomes,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                fill: false
-            }, {
-                label: 'Egresos',
-                data: monthlyOutcomes,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                fill: false
-            }]
+            labels: monthLabels, // Etiquetas dinámicas de los meses
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: monthlyIncomes, // Valores de ingresos
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false,
+                },
+                {
+                    label: 'Egresos',
+                    data: monthlyOutcomes, // Valores de egresos
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false,
+                }
+            ]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
     });
+
+
 </script>
 @endsection
