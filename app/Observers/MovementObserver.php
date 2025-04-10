@@ -19,4 +19,16 @@ class MovementObserver
 
         $product->save();
     }
+
+    public function updated(Movement $movement)
+    {
+        $product = $movement->product;
+
+        if ($movement->type === 'ingreso') {
+            $product->quantity += 0;
+        } elseif ($movement->type === 'egreso') {
+            $product->quantity -= 0;
+        }
+        $product->save();
+    }
 }

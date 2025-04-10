@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Kardex del Producto</h2>
+    <h2>Kardex del producto</h2>
     <p><strong>Producto:</strong> {{ $product->name }}</p>
 
     @if($kardex->isEmpty())
@@ -11,7 +11,7 @@
         <div class="mb-3">
             <h4>Resumen</h4>
             <ul>
-                <li><strong>Stock Actual:</strong> {{ $product->quantity }}</li>
+                <li><strong>Stock actual:</strong> {{ $product->quantity }}</li>
                 <li><strong>Total de ingresos:</strong> {{ $kardex->where('tipo', 'Ingreso')->sum('cantidad') }}</li>
                 <li><strong>Total de egresos:</strong> {{ $kardex->where('tipo', 'Egreso')->sum('cantidad') }}</li>
                 <li><strong>Saldo final:</strong> {{ $kardex->isEmpty() ? 'N/A' : $kardex->last()['saldo'] }}</li>

@@ -22,9 +22,9 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Listado de Movimientos</h3>
+                    <h3 class="card-title">Listado de movimientos</h3>
                     <a href="{{ route('movements.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar movimiento
                     </a>
                 </div>
             </div>

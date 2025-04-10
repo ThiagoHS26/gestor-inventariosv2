@@ -11,7 +11,7 @@
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Productos</a></li>
-                    <li class="breadcrumb-item active">Crear Producto</li>
+                    <li class="breadcrumb-item active">Crear producto</li>
                 </ol>
             </div>
         </div>
@@ -22,13 +22,13 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Nuevo Producto</h3>
+                <h3 class="card-title">Nuevo producto</h3>
             </div>
             <div class="card-body">
                 <form action="{{ route('products.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="name">Nombre del Producto</label>
+                        <label for="name">Nombre del producto</label>
                         <input type="text" name="name" id="name" class="form-control" required>
                     </div>
                     <div class="form-group">
@@ -53,21 +53,21 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" required>
+                        <input type="number" name="quantity" id="quantity" class="form-control" required min="0">
                     </div>
                     <div class="form-group">
                         <label for="min_stock">Stock mínimo</label>
-                        <input type="number" name="min_stock" id="min_stock" class="form-control" required>
+                        <input type="number" name="min_stock" id="min_stock" class="form-control" required min="0">
                     </div>
                     <div class="form-group">
                         <label for="max_stock">Stock máximo</label>
-                        <input type="number" name="max_stock" id="max_stock" class="form-control" required>
+                        <input type="number" name="max_stock" id="max_stock" class="form-control" required min="0">
                     </div>
                     <div class="form-group">
                         <label for="price">Precio unitario</label>
-                        <input type="number" name="price" id="price" class="form-control" required>
+                        <input type="number" name="price" id="price" class="form-control" required step="0.01" min="0">
                     </div>
-                    <button type="submit" class="btn btn-success">Guardar Producto</button>
+                    <button type="submit" class="btn btn-success">Guardar producto</button>
                 </form>
             </div>
         </div>

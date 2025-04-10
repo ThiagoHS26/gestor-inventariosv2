@@ -78,8 +78,8 @@ class MovementController extends Controller
     {
         $request->validate([
             'type' => 'required|in:ingreso,egreso',
-            'product_id' => 'required|exists:products,id',
             'description' => 'required',
+            'product_id' => 'required|exists:products,id',
             'warehouse_id' => 'required|exists:warehouses,id',
             'user_id' => 'required|exists:users,id',
             'quantity' => 'required|integer',

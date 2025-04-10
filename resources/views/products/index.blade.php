@@ -22,10 +22,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Listado de Movimientos</h3>
+                    <h3 class="card-title">Listado de productos</h3>
                     @if(Auth::user()->role === 'admin')
                     <a href="{{ route('products.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar producto
                     </a>
                     @endif
                 </div>
@@ -44,19 +44,7 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($products as $product)
-                        <tr>
-                            <td>{{ $product->id }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->description }}</td>
-                            <td>{{ $product->category->name }}</td>
-                            <td>{{ $product->warehouse->name }}</td>
-                            <td>{{ $product->quantity }}</td>
-                            <td>{{ $product->price }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                    
                 </table>
             </div>
         </div>

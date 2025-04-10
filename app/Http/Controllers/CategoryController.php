@@ -12,9 +12,12 @@ class CategoryController extends Controller
     {
 
         if ($request->ajax()) {
-            $categories = Category::query();
-    
+            $categories = Category::withCount('products');
+            
             return DataTables::of($categories)
+                ->addColumn('products_count',function($category){
+                    return $category->products_count;
+                })
                 ->addColumn('actions', function ($category) {
                     return view('categories.partials.actions', compact('category'))->render();
                 })

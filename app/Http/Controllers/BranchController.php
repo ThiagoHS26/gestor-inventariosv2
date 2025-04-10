@@ -70,4 +70,5 @@ class BranchController extends Controller
         return redirect()->route('branches.index')->with('warning', '¡Se ha eliminado la empresa!');
     }
 
+    
 }

@@ -5,12 +5,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Bodegas</h1>
+                <h1 class="m-0">Almacenes</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
-                    <li class="breadcrumb-item active">Bodegas</li>
+                    <li class="breadcrumb-item active">Almacenes</li>
                 </ol>
             </div>
         </div>
@@ -22,10 +22,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                <h3 class="card-title">Listado de Bodegas</h3>
+                <h3 class="card-title">Listado de almacenes</h3>
                 @if(Auth::user()->role === 'admin')
                     <a href="{{ route('warehouses.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar almacén
                     </a>
                 @endif
                 </div>

@@ -22,10 +22,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Listado de Categorías</h3>
+                    <h3 class="card-title">Listado de categorías</h3>
                     @if(Auth::user()->role === 'admin')
                     <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                        <i class="fas fa-plus-circle mr-1"></i> Registrar categoria
                     </a>
                     @endif
                 </div>
@@ -37,6 +37,7 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Productos</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -46,6 +47,7 @@
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->description }}</td>
+                        <td>{{$category->products_count}}</td>
                     </tr>
                     @empty
                     <tr>
@@ -75,6 +77,7 @@
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'description', name: 'description' },
+                {data: 'products_count', name: 'products_count'},
                 { data: 'actions', name: 'actions', orderable: false, searchable: false }
             ]
         });

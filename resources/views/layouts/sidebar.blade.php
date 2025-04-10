@@ -49,7 +49,7 @@
                 <li class="nav-item">
                     <a href="{{ route('warehouses.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-warehouse"></i>
-                        <p>Bodegas</p>
+                        <p>Almacenes</p>
                     </a>
                 </li>
                 <li class="nav-item">

@@ -62,9 +62,9 @@ class UserController extends Controller
             'role' => 'required',
         ]);
 
-        $user->update($request->only('name', 'email', 'role'))->with('success', '¡Usuario actualizado con éxito!');
+        $user->update($request->all());
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success','!Usuario actualizado!');
     }
 
     public function destroy(User $user)

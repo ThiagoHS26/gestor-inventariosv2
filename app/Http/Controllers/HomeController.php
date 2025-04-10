@@ -37,21 +37,28 @@ class HomeController extends Controller
     /*Top productos con mas salidas*/
     private function getTopProducts()
     {
-        return Movement::where('type', 'egreso')
+        $movements = Movement::where('type', 'egreso')
             ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
             ->groupBy('product_id')
             ->orderByDesc('total_sold')
             ->take(5)
             ->with('product')
             ->get()
-            ->map(function ($movement) {
-                $name = $movement->product->name;
-                $abbreviation = substr($name, 0, 15);
-                return [
-                    'name' => $abbreviation,
-                    'total_sold' => $movement->total_sold,
-                ];
+            ->filter(function($movement){
+                return $movement->product!==null;
             });
+            
+        if($movements->isEmpty()){
+            return null;
+        }
+
+        return $movements->map(function($movement){
+            $name=$movement->product->name;
+            return [
+                'name'=> substr($name,0,15),
+                'total_sold'=> $movement->total_sold,
+            ];
+        })->values();
     }
 
     /* Niveles de Stock por categoria */
@@ -114,7 +121,7 @@ class HomeController extends Controller
 
     private function getLowStockProducts()
     {
-        return Product::where('quantity', '<', 5)->get();
+        return Product::where('quantity', '<', 30)->get();
     }
 
     

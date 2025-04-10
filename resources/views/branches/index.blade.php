@@ -22,10 +22,11 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Listado de Empresas</h3>
+                        
+                    <h3 class="card-title">Listado de empresas</h3>
                     @if(Auth::user()->role === 'admin')
                         <a href="{{ route('branches.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus-circle mr-1"></i> Registrar Movimiento
+                            <i class="fas fa-plus-circle mr-1"></i> Registrar empresa
                         </a>
                     @endif
                 </div>

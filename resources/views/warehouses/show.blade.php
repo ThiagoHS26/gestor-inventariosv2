@@ -2,16 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Detalles de Sucursal: {{ $warehouse->name }}</h1>
+    <h1 class="mb-4">Detalles del almacén: {{ $warehouse->name }}</h1>
 
     <!-- Información del Almacén -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5>Información de Sucursal</h5>
+            <h5>Información del almacén</h5>
         </div>
         <div class="card-body">
             <p><strong>Empresa:</strong> {{ $warehouse->branch->name }}</p>
-            <p><strong>Sucursal:</strong> {{ $warehouse->name }}</p>
+            <p><strong>Almacén:</strong> {{ $warehouse->name }}</p>
         </div>
     </div>
 
@@ -49,7 +49,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">No hay productos en este almacén.</td>
+                            <td colspan="6" class="text-center">No hay productos en esta sucursal.</td>
                         </tr>
                     @endforelse
                 </tbody>

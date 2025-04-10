@@ -5,13 +5,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Editar Movimiento</h1>
+                <h1 class="m-0">Editar movimiento</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('movements.index') }}">Movimientos</a></li>
-                    <li class="breadcrumb-item active">Editar Movimiento</li>
+                    <li class="breadcrumb-item active">Editar movimiento</li>
                 </ol>
             </div>
         </div>
@@ -22,39 +22,46 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Modificar Movimiento</h3>
+                <h3 class="card-title">Modificar movimiento</h3>
             </div>
             <div class="card-body">
-                <form action="{{ route('movements.update', $movement->id) }}" method="POST">
+                <form  action="{{ route('movements.update', $movement->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="type">Tipo de Movimiento</label>
-                        <select name="type" id="type" class="form-control" required>
-                            <option value="ingreso" {{ $movement->type == 'ingreso' ? 'selected' : '' }}>Ingreso</option>
-                            <option value="egreso" {{ $movement->type == 'egreso' ? 'selected' : '' }}>Egreso</option>
-                        </select>
+                        <label for="type">Tipo de movimiento</label>
+                        <input value="{{$movement->type}}" class="form-control" name="type" id="type" readonly>
                     </div>
                     <div class="form-group">
                         <label for="type">Detalle del movimiento</label>
-                        <textarea name="description" id="description" class="form-control" value="{{ $movement->description }}" required></textarea>
+                        
+                        <textarea name="description" id="description" class="form-control"  required>{{ $movement->description }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="product_id">Producto</label>
-                        <select name="product_id" id="product_id" class="form-control" disabled>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}" {{ $product->id == $movement->product_id ? 'selected' : '' }}>{{ $product->name }}</option>
-                            @endforeach
-                        </select>
+                        <input value="{{$movement->product_id}}" class="form-control" name="product_id" id="product_id" readonly hidden>
+
+                        @forEach ($products as $item)
+                            @if($movement->product_id === $item->id)
+                                <input type="text" value="{{$item->name}}" class="form-control" readonly>
+                                @break;
+                            @endif
+
+                        @endforeach
+
                     </div>
                     <div class="form-group">
                         <label for="warehouse_id">Almacén</label>
-                        <select name="warehouse_id" id="warehouse_id" class="form-control" disabled>
-                            @foreach($warehouses as $warehouse)
-                                <option value="{{ $warehouse->id }}" {{ $warehouse->id == $movement->warehouse_id ? 'selected' : '' }}>{{ $warehouse->name }}</option>
-                            @endforeach
-                        </select>
+                        <input value="{{$movement->warehouse_id}}" class="form-control" name="warehouse_id" id="warehouse_id" readonly hidden>
+
+                        @forEach ($warehouses as $item)
+                            @if($movement->warehouse_id === $item->id)
+                                <input type="text" value="{{$item->name}}" class="form-control" readonly>
+                                @break;
+                            @endif
+                        @endforeach
                     </div>
+                    
                     <div class="form-group">
     
                         <input type="text" name="user_id" id="user_id" class="form-control"
@@ -63,16 +70,47 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" value="{{ $movement->quantity }}" required>
+                        <input type="number" name="quantity" id="quantity" class="form-control" value="{{ $movement->quantity }}" required readonly min="0">
                     </div>
                     <div class="form-group">
                         <label for="date">Fecha</label>
                         <input type="date" name="date" id="date" class="form-control" value="{{ $movement->date }}" required>
                     </div>
-                    <button type="submit" class="btn btn-warning">Actualizar Movimiento</button>
+                    <button type="submit" class="btn btn-warning">Actualizar movimiento</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<script>
+    const productSelect = document.getElementById('product_id');
+    const warehouseSelect = document.getElementById('warehouse_id');
+    const warehouseHidden = document.getElementById('warehouse_id_hidden');
+
+   
+    console.log(productSelect);
+
+    function updateWarehouse() {
+        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        const warehouseId = selectedOption.getAttribute('data-warehouse-id');
+        if (warehouseId) {
+            warehouseSelect.value = warehouseId;
+            warehouseHidden.value = warehouseId;
+        }
+    }
+
+    /*const miformulario = document.getElementById('miform');
+    miformulario.addEventListener('submit',function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.forEach((value, key)=>{
+            console.log(`${key}: ${value}`);
+        });
+      });
+*/
+    productSelect.addEventListener('change', updateWarehouse);
+
+    // Set initial value on page load
+    window.addEventListener('DOMContentLoaded', updateWarehouse);
+</script>
 @endsection

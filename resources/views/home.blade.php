@@ -7,7 +7,7 @@
     <div class="col-lg-12 mb-4">
         <div class="card">
             <div class="card-header">
-                    <h4>Movimientos Mensuales</h4>
+                    <h4>Movimientos mensuales</h4>
             </div>
             <div class="card-body">
                 <div class="chart-container" style="height: 300px; width: 100%;">
@@ -37,7 +37,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <h4>Niveles de Stock por Categoría</h4>
+                    <h4>Stock por categoría</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -51,7 +51,7 @@
         <div class="col-lg-12 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <h4>Movimientos Mensuales</h4>
+                    <h4>Movimientos mensuales</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -65,7 +65,7 @@
     <!-- Productos en bajo stock -->
     <div class="card">
         <div class="card-header">
-            <h4>Productos en Bajo Stock</h4>
+            <h4>Productos con bajo stock</h4>
         </div>
         <div class="card-body">
             @if($lowStockProducts->isEmpty())
@@ -93,21 +93,26 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
 <script>
     // Datos desde el servidor
 
-    const warehouseNames = @json($inventoryData['warehouseNames']);
-    const warehouseProducts = @json($inventoryData['warehouseProducts']);
+    const warehouseNames = @json(isset($inventoryData['warehouseNames'])? $inventoryData['warehouseNames']:[]);
+    const warehouseProducts = @json(isset($inventoryData['warehouseProducts'])? $inventoryData['warehouseProducts']:[]);
 
-    const topProductsNames = @json($topProducts->pluck('name'));
-    const topProductsSales = @json($topProducts->pluck('total_sold'));
+    const topProductsNames = @json($topProducts ? $topProducts->pluck('name'):[]);
+    const topProductsSales = @json($topProducts ? $topProducts->pluck('total_sold'):[]);
 
-    const categoryNames = @json($stockLevels->pluck('name'));
-    const categoryStocks = @json($stockLevels->pluck('total_stock'));
+    const categoryNames = @json($stockLevels ? $stockLevels->pluck('name'):[]);
+    const categoryStocks = @json($stockLevels ? $stockLevels->pluck('total_stock'):[]);
    
     const monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-    const monthlyIncomes = @json($monthlyMovements['incomes']);
-    const monthlyOutcomes = @json($monthlyMovements['outcomes']);
+    const monthlyIncomes = @json(isset($monthlyMovements['incomes']) ? $monthlyMovements['incomes'] : []);
+    const monthlyOutcomes = @json(isset($monthlyMovements['outcomes']) ? $monthlyMovements['outcomes'] : []);
 
 
 

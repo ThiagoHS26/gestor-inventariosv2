@@ -5,13 +5,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Editar Empresa</h1>
+                <h1 class="m-0">Editar empresa</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('branches.index') }}">Empresas</a></li>
-                    <li class="breadcrumb-item active">Editar Empresa</li>
+                    <li class="breadcrumb-item active">Editar empresa</li>
                 </ol>
             </div>
         </div>
@@ -22,14 +22,14 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Modificar Empresa</h3>
+                <h3 class="card-title">Modificar empresa</h3>
             </div>
             <div class="card-body">
                 <form action="{{ route('branches.update', $branch->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="name">Nombre de la Empresa</label>
+                        <label for="name">Nombre de la empresa</label>
                         <input type="text" name="name" id="name" class="form-control" value="{{ $branch->name }}" required>
                     </div>
                     <div class="form-group">
@@ -55,7 +55,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-warning">Actualizar Sucursal</button>
+                    <button type="submit" class="btn btn-warning">Actualizar empresa</button>
                 </form>
             </div>
         </div>
